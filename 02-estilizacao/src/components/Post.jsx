@@ -1,37 +1,79 @@
+import { format, formatDistanceToNow } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR';
+
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 import styles from './Post.module.css';
+import { useState } from 'react';
 
-export function Post(){
+export function Post({author, publishedAt, content}){
+  const publishedDateFormatted = format(publishedAt, "dd 'de' LLLL 'às' HH:mm'h'", {
+    locale: ptBR
+  })
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true
+  })
+
+  const [comments,  setComments] = useState([
+    'Post muito bacana'
+  ])
+
+  const [newCommentText, setNewCommentText] = useState('')
+
+  function handleNewCommentChange(){
+    setNewCommentText(event.target.value)
+  }
+
+  function handleCreateNewComment(){
+    event.preventDefault()
+
+    setComments([...comments, newCommentText])
+    setNewCommentText('')
+  }
+
+  function deleteComment(commentToDelete){
+    const commentsWithoutDeleteOne = comments.filter(comment =>{
+      return comment!== commentToDelete      
+    })
+    setComments(commentsWithoutDeleteOne)
+  }
+
   return(
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://avatars.githubusercontent.com/u/12806963?v=4" />
+          <Avatar src={author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Cezar A. Molinar</strong>
-            <span>Web Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time title='2022-05-11 08:13:30' dateTime='2022-05-11 08:13:30'>Publicado há 1h</time>
+        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
+          Publicado há {publishedDateRelativeToNow}
+        </time>
       </header>
 
       <div className={styles.content}>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore 
-          et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
-          aliquip ex ea commodo consequat. </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
-          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-          ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fug</p>
-        <p>:👉 {' '}<a href=''>jane.design/doctorcare</a></p>
+        {content.map(line  => {
+          if (line.type === 'paragraph') {
+            return <p key={line.content}>{line.content}</p>
+          } else if (line.type === 'link'){
+            return <p key={line.content}><a href='#'>{line.content}</a></p>
+          }
+        })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
 
         <textarea 
+          name="comment"
           placeholder='Deixe seu comentário'
+          value={newCommentText}
+          onChange={handleNewCommentChange}
         />
 
         <footer>
@@ -40,8 +82,15 @@ export function Post(){
       </form>
 
       <div className={styles.commentsList}>
-        <Comment />
-        <Comment />
+        {comments.map(comment => {
+          return (
+            <Comment 
+              key={comment} 
+              content={comment}
+              onDeleteComment={deleteComment} 
+            /> 
+          )
+        })}
       </div>
       
     </article>
