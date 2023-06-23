@@ -17,7 +17,8 @@ interface IContent {
   content: string;
 }
 
-interface IPostProps {
+export interface IPostProps {
+  id?: number;
   author: IAuthor;
   publishedAt: Date;
   content: IContent[];
