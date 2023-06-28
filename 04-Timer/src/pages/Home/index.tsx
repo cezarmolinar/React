@@ -12,10 +12,16 @@ import {
 } from './styles'
 
 export function Home() {
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch, reset } = useForm()
 
-  function metodoPostForm(data: any) {
+  interface NewCycleFormData {
+    task: string
+    minutes: number
+  }
+
+  function metodoPostForm(data: NewCycleFormData) {
     console.log(data)
+    reset()
   }
 
   const task = watch('task')
