@@ -6,7 +6,7 @@
       "type": "income",
       "category": "Venda",
       "price": 14000,
-      "createAt": "2013-04-22T08:20:23.505Z"
+      "createdAt": "2013-04-22T08:20:23.505Z"
     },
     {
       "id": 2,
@@ -14,6 +14,7 @@
       "type": "outcome",
       "category": "Alimento",
       "price": 14,
-      "createAt": "2013-04-22T07:10:23.505Z"
+      "createdAt": "2013-04-22T07:10:23.505Z"
     }
   ]
+}
