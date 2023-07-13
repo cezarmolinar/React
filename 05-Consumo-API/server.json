@@ -1,4 +1,4 @@
-{ 
+{
   "transactions": [
     {
       "id": 1,
@@ -23,6 +23,14 @@
       "category": "Venda",
       "price": 154,
       "createdAt": "2013-01-14T07:10:23.505Z"
+    },
+    {
+      "description": "xaropo espectorante",
+      "price": 28,
+      "category": "Saúde",
+      "type": "outcome",
+      "createdAt": "2023-07-13T14:24:15.256Z",
+      "id": 4
     }
   ]
 }
